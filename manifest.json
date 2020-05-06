@@ -22,5 +22,13 @@
     "default_popup": "index.html"
   },
 
+  "content_scripts": [{
+    "matches": ["https://docs.google.com/document/*"],
+    "js": ["scripts/content_script.js"],
+    "run_at": "document_end",
+    "all_frames": true,
+    "match_about_blank": true
+  }],
+
   "manifest_version": 2
 }
