@@ -16,12 +16,12 @@ navBarBtns[2].addEventListener("click", () => {
 });
 
 //TODO: Evaluate if this code block is necessary, considering content_script.js
-injectScript = () => {
+/*injectScript = () => {
     updateWordCount = () => {
         let wordCount = document.getElementsByClassName("kix-paginateddocumentplugin")[0].innerText.match(/\w+/g).length;
         let docWriterProgressbar = document.getElementById("docWriterProgressbar");
         let docWriterProgressbarParent = document.getElementById("docWriterProgressbarParent");
-        docWriterProgressbar.style.width = (((wordCount)/(/*word limit. TODO: Fetch from chrome storage*/5000))*100) + "%";
+        docWriterProgressbar.style.width = (((wordCount)/(word limit. TODO: Fetch from chrome storage 5000))*100) + "%";
         docWriterProgressbarParent.getElementsByClassName("wc")[0].innerText = wordCount;
         return wordCount;
     };
@@ -35,6 +35,6 @@ injectScript = () => {
 
     document.getElementsByClassName("kix-paginateddocumentplugin")[0].addEventListener("DOMSubtreeModified", () => {updateWordCount()});
     updateWordCount();
-};
+};*/
 
 chrome.tabs.executeScript({code:'(' + injectScript +')();'});
