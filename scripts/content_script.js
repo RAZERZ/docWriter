@@ -1,66 +1,77 @@
-//Instantiate important variables
+chrome.storage.sync.get("docWriter", syncedStorageObj => {
 
-let documentWordCount;
-let wordcount = 0;
-let timepassed = 0;
+    if(syncedStorageObj.docWriter.documents.activeDocs.docId.length !== 0 && syncedStorageObj.docWriter.documents.activeDocs.docId == window.location.href.substr(35)) {
 
-//Extras
+        console.log("we're good");
 
-document.body.addEventListener("keydown", () => {
-    wordcount++;
-    console.log(Math.round((wordcount/5)/(timepassed/60)));
-}, true);
+        //Instantiate important variables
 
-setInterval(()=>{
-    timepassed++;
-    //console.log(Math.round((wordcount/5)/(timepassed/60)));
-},1000);
+        let documentWordCount;
+        let wordcount = 0;
+        let timepassed = 0;
 
-//Define functions
+        //Extras
 
-getWordCount = () => {
-    documentWordCount = document.getElementsByClassName("kix-paginateddocumentplugin")[0].innerText.match(/\w+/g).length;
-    return documentWordCount;
-};
+        document.body.addEventListener("keydown", () => {
+            wordcount++;
+            console.log(Math.round((wordcount/5)/(timepassed/60)));
+        }, true);
 
-updateWordCount = () => {
-    docWriterProgressbar.style.width = (((getWordCount())/(/*word limit. TODO: Fetch from chrome storage*/5000))*100) + "%";
-    docWriterInfoSpan.innerText = getWordCount() + " words";
-};
+        setInterval(()=>{
+            timepassed++;
+            //console.log(Math.round((wordcount/5)/(timepassed/60)));
+        },1000);
 
-//Load progress bar
-let docWriterParent = document.createElement("div");
-let docWriterProgressbarParent = document.createElement("div");
-let docWriterProgressbar = document.createElement("div");
-let docWriterInfoSpan = document.createElement("span");
+        //Define functions
 
-docWriterParent.id = "docWriterParent";
-docWriterProgressbar.id = "docWriterProgressbar";
-docWriterInfoSpan.className = "docWriterInfoSpan";
+        getWordCount = () => {
+            documentWordCount = document.getElementsByClassName("kix-paginateddocumentplugin")[0].innerText.match(/\w+/g).length;
+            return documentWordCount;
+        };
 
-docWriterParent.setAttribute("style", "position: absolute;width:30%;height: 2.5%;top:35px;left:800px;z-index:999");
-docWriterProgressbarParent.setAttribute("style", "width:80%;height:100%;float:right;background:#212121;border-radius:50px;z-index:999");
-docWriterProgressbar.setAttribute("style", "width:0%;height:100%;background:#00ad00;border-radius:50px;transition:2s ease");
-docWriterInfoSpan.setAttribute("style", "color:#171717;font-size:1.1em;padding:0.5% 2%;border:1px solid gray;border-radius:50px");
+        updateWordCount = () => {
+            docWriterProgressbar.style.width = (((getWordCount())/(/*TODO: Cleanup syncedStorageObj.docWriter.documents.activeDocs.limit*/))*100) + "%";
+            docWriterInfoSpan.innerText = getWordCount() + " words";
+        };
 
-docWriterParent.appendChild(docWriterProgressbarParent);
-docWriterParent.appendChild(docWriterInfoSpan);
-docWriterProgressbarParent.appendChild(docWriterProgressbar);
-document.body.insertBefore(docWriterParent, document.body.children[0]);
+        //Load progress bar
+        let docWriterParent = document.createElement("div");
+        let docWriterProgressbarParent = document.createElement("div");
+        let docWriterProgressbar = document.createElement("div");
+        let docWriterInfoSpan = document.createElement("span");
 
-//Onload populate fields
+        docWriterParent.id = "docWriterParent";
+        docWriterProgressbar.id = "docWriterProgressbar";
+        docWriterInfoSpan.className = "docWriterInfoSpan";
 
-docWriterInfoSpan.innerText = getWordCount() + " words";
+        docWriterParent.setAttribute("style", "position: absolute;width:30%;height: 2.5%;top:35px;left:800px;z-index:999");
+        docWriterProgressbarParent.setAttribute("style", "width:80%;height:100%;float:right;background:#212121;border-radius:50px;z-index:999");
+        docWriterProgressbar.setAttribute("style", "width:0%;height:100%;background:#00ad00;border-radius:50px;transition:2s ease");
+        docWriterInfoSpan.setAttribute("style", "color:#171717;font-size:1.1em;padding:0.5% 2%;border:1px solid gray;border-radius:50px");
 
-//Set eventlisteners
+        docWriterParent.appendChild(docWriterProgressbarParent);
+        docWriterParent.appendChild(docWriterInfoSpan);
+        docWriterProgressbarParent.appendChild(docWriterProgressbar);
+        document.body.insertBefore(docWriterParent, document.body.children[0]);
 
-document.getElementsByClassName("kix-paginateddocumentplugin")[0].addEventListener("DOMSubtreeModified", () => {
-    docWriterProgressbar.style.width = (((getWordCount())/(/*word limit. TODO: Fetch from chrome storage*/5000))*100) + "%";
-    docWriterInfoSpan.innerText = getWordCount() + " words";
+        //Onload populate fields
+
+        docWriterInfoSpan.innerText = getWordCount() + " words";
+
+        //Set eventlisteners
+
+        document.getElementsByClassName("kix-paginateddocumentplugin")[0].addEventListener("DOMSubtreeModified", () => {
+            docWriterProgressbar.style.width = (((getWordCount())/(/*word limit. TODO: Fetch from chrome storage*/2800))*100) + "%";
+            docWriterInfoSpan.innerText = getWordCount() + " words";
+        });
+
+        docWriterInfoSpan.addEventListener("click", () => {
+            //TODO: Change to wpm
+        });
+
+    }
+    else {
+        console.log("0w0");
+    }
+
 });
-
-docWriterInfoSpan.addEventListener("click", () => {
-    //TODO: Change to wpm
-});
-
-//Temp code
