@@ -7,6 +7,7 @@ let staticStorage = {
         documents: {
             activeDocs: {
                 docId: [],
+                link: [],
                 title: [],
                 limit: {
                     deadline: [],
@@ -18,7 +19,8 @@ let staticStorage = {
                 currSession: []
             },
             inactiveDocs: {
-                docId: []
+                docId: [],
+                title: []
             }
         }
     }
