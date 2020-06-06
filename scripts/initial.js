@@ -1,10 +1,11 @@
 let navBarBtns = document.getElementById("navBar").children;
+let contentContainer = document.getElementById("content");
 
 navBarBtns[0].addEventListener("click", () => {
     for(let i=0;navBarBtns.length>i;i++){navBarBtns[i].removeAttribute("class");}
     navBarBtns[0].setAttribute("class", "active");
 
-    document.getElementById("content").innerHTML = '<div class="overview"><div class="activeDocs"></div></div>';
+    contentContainer.innerHTML = '<div class="overview"><div class="activeDocs"></div></div>';
 
     chrome.storage.sync.get("docWriter", resp => {
         let docWriter = resp.docWriter;
@@ -29,7 +30,7 @@ navBarBtns[0].addEventListener("click", () => {
 
             let bgColor = getColorForPercentage(progressPct);
 
-            activeDocs.innerHTML += '<div class="listElement"><p class="title">' + docWriter.documents.activeDocs.title[i] + '</p><div class="activeContent"><span class="deadline">' + docWriter.documents.activeDocs.limit.deadline[i] + '</span><div class="progress"><div class="progressbar" style="width:' + progressPct*100 + '%;background:' + bgColor + ';"></div></div></div></div>';
+            activeDocs.innerHTML += '<div class="listElement"><p class="title"><a href="' + docWriter.documents.activeDocs.link[i] + '" target="_blank">' + docWriter.documents.activeDocs.title[i] + '</a></p><div class="activeContent"><span class="deadline">' + docWriter.documents.activeDocs.limit.deadline[i] + '</span><div class="progress"><div class="progressbar" style="width:' + progressPct*100 + '%;background:' + bgColor + ';"></div></div></div></div>';
 
         }
 
@@ -40,11 +41,17 @@ navBarBtns[0].addEventListener("click", () => {
 navBarBtns[1].addEventListener("click", () => {
     for(let i=0;navBarBtns.length>i;i++){navBarBtns[i].removeAttribute("class");}
     navBarBtns[1].setAttribute("class", "active");
+
+    contentContainer.innerHTML = '<div class="goals"><div class="addGoal"><button>Add new goal</button></div></div>';
+
 });
 
 navBarBtns[2].addEventListener("click", () => {
     for(let i=0;navBarBtns.length>i;i++){navBarBtns[i].removeAttribute("class");}
     navBarBtns[2].setAttribute("class", "active");
+
+    contentContainer.innerHTML = '';
+
 });
 
 

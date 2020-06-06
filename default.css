@@ -27,6 +27,31 @@ body {
     color: #fff;
 }
 
+hr {
+    margin: 10% 0;
+}
+
+h1 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+p {
+    text-align: center
+}
+
+button {
+    display: block;
+    margin: auto;
+    border: unset;
+    width: 70%;
+    user-select: none;
+}
+
+a {
+    color: #fff;
+}
+
 #navBar {
     width: 100%;
     text-align: center;
@@ -64,10 +89,6 @@ body {
     margin-top: 15px;
 }
 
-.listElement:nth-child(even) {
-    background-color: #212121;
-}
-
 .listElement .title {
     text-decoration: underline;
     margin: unset;
@@ -93,34 +114,9 @@ body {
     border-radius: 50px;
 }
 
-.listElement:nth-child(even) .progress {
-    background: #282828;
-}
-
-
-hr {
-    margin: 10% 0;
-}
-
-h1 {
-    text-align: center;
-    text-decoration: underline;
-}
-
-p {
-    text-align: center
-}
-
-button {
-    display: block;
-    margin: auto;
-    border: unset;
-    width: 70%;
-    user-select: none;
-}
-
-a {
-    color: #fff;
+.goals button {
+    border-radius: 50px;
+    
 }
 
 div.dotLoading {
