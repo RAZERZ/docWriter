@@ -1,10 +1,10 @@
 chrome.storage.sync.get("docWriter", syncedStorageObj => {
 
-    if(syncedStorageObj.docWriter.documents.activeDocs.docId.length !== 0 && syncedStorageObj.docWriter.documents.activeDocs.docId.includes(window.location.href.substr(35))) {
+    if(syncedStorageObj.docWriter.documents.activeDocs.docId.length !== 0 && syncedStorageObj.docWriter.documents.activeDocs.docId.includes(window.location.href.substr(35, 44))) {
 
         //Instantiate important variables
 
-        let stackIndex = syncedStorageObj.docWriter.documents.activeDocs.docId.indexOf(window.location.href.substr(35));
+        let stackIndex = syncedStorageObj.docWriter.documents.activeDocs.docId.indexOf(window.location.href.substr(35, 44));
         let docLimit;
         let documentWordCount;
         let wordcount = 0;
@@ -60,7 +60,7 @@ chrome.storage.sync.get("docWriter", syncedStorageObj => {
         //Define functions
 
         getWordCount = () => {
-            documentWordCount = document.getElementsByClassName("kix-paginateddocumentplugin")[0].innerText.match(/\w+/g).length;
+            documentWordCount = document.getElementsByClassName("kix-paginateddocumentplugin")[0].innerText.match(/\S+/g).length; //Was /\w+/g
             return documentWordCount;
         };
 
@@ -71,6 +71,9 @@ chrome.storage.sync.get("docWriter", syncedStorageObj => {
 
         //Load progress bar
 
+        //Remove "last changed" message to free up space
+        document.getElementById("docs-notice").remove();
+
         let docWriterParent = document.createElement("div");
         let docWriterProgressbarParent = document.createElement("div");
         let docWriterProgressbar = document.createElement("div");
@@ -80,7 +83,7 @@ chrome.storage.sync.get("docWriter", syncedStorageObj => {
         docWriterProgressbar.id = "docWriterProgressbar";
         docWriterInfoSpan.className = "docWriterInfoSpan";
 
-        docWriterParent.setAttribute("style", "position: absolute;width:30%;height:2.5%;top:35px;left:800px;z-index:999");
+        docWriterParent.setAttribute("style", "position: absolute;width:30%;height:2.5%;top:35px;left:550px;z-index:999");
         docWriterProgressbarParent.setAttribute("style", "width:80%;height:100%;float:right;background:#212121;border-radius:50px;overflow:hidden;z-index:999");
         docWriterProgressbar.setAttribute("style", "width:0%;height:100%;border-radius:50px;transition:2s ease");
         docWriterInfoSpan.setAttribute("style", "color:#171717;font-size:1.1em;padding:0.5% 2%;border:1px solid gray;border-radius:50px");
@@ -114,21 +117,40 @@ chrome.storage.sync.get("docWriter", syncedStorageObj => {
         }, 10000);
 
     }
-    else if(syncedStorageObj.docWriter.documents.inactiveDocs.docId.length !== 0 && syncedStorageObj.docWriter.documents.inactiveDocs.docId == window.location.href.substr(35)){}
-    else if(window.location.href.substr(37) == "") {}
+    else if(syncedStorageObj.docWriter.documents.inactiveDocs.docId.length !== 0 && syncedStorageObj.docWriter.documents.inactiveDocs.docId == window.location.href.substr(35, 44)){}
+    else if(window.location.href.substr(37) == "" || window.location.href.substr(37) == "?tgif=d") {}
+
     else {
+
         let docWriterParent = document.createElement("div");
         let docWriterChild = document.createElement("span");
+        let docWriterMessageContainer = document.createElement("div");
+        let docWriterMessageTitle = document.createElement("span");
+        let docWriterMessageContent = document.createElement("span");
 
         docWriterChild.innerText = "new";
         docWriterParent.id = "docWriterParent";
-        docWriterParent.setAttribute("style", "position:absolute;left:800px;top:35px;border-radius:50px;user-select:none; z-index:999");
+        docWriterMessageTitle.innerText = "Would you like to add this document to the list of tasks?";
+        docWriterMessageContent.innerText = "Open the docWriter extension and add it";
+        docWriterParent.setAttribute("style", "position:absolute;left:800px;top:35px;border-radius:50px;cursor:pointer;user-select:none;z-index:999");
         docWriterChild.setAttribute("style", "color:#eaeaea;font-size:1.1em;padding:15% 35%;background:#f44336;border-radius:50px");
+        docWriterMessageContainer.setAttribute("style", "position:absolute;width:322px;margin-top:10px;margin-left:-150px;background:#424242;color:#fff;padding:20px;border-radius:50px;cursor:default");
 
-        docWriterParent.addEventListener("click", ()=>{console.log("Would you like to add this document to the list of docs with deadlines?");});
+        docWriterParent.addEventListener("click", ()=>{
+            if(!docWriterMessageContainer.children.length) {
+                docWriterParent.appendChild(docWriterMessageContainer);
+                docWriterMessageContainer.appendChild(docWriterMessageTitle);
+                docWriterMessageContainer.appendChild(document.createElement("hr"));
+                docWriterMessageContainer.appendChild(docWriterMessageContent);
+            }
+            else {
+                docWriterParent.innerHTML = ""; //TODO: Add possible styling/x btn
+            }
+        });
 
         docWriterParent.appendChild(docWriterChild);
         document.body.insertBefore(docWriterParent, document.body.children[0]);
+
     }
 
 });
